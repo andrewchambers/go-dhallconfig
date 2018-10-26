@@ -17,7 +17,7 @@ func GetDhallType(config interface{}) (string, error) {
 
 	getDhallType(&input, config)
 
-	cmd := exec.Command("dhall-format")
+	cmd := exec.Command("dhall", "format")
 	cmd.Stdin = &input
 	cmd.Stdout = &output
 
@@ -36,7 +36,7 @@ func getDhallType(buf *bytes.Buffer, config interface{}) {
 		v = reflect.Indirect(v)
 	}
 
-	_, _ = fmt.Fprintf(buf, "{ ")
+	_, _ = fmt.Fprintf(buf, "{")
 
 	t := v.Type()
 	for i := 0; i < t.NumField(); i++ {

@@ -12,7 +12,7 @@ type ConfigType struct {
 }
 
 func TestGetType(t *testing.T) {
-	expectedConfigType := `{ Bar : Integer, Baz : Bool, Foo : Text }`
+	expectedConfigType := `{ Foo : Text, Bar : Integer, Baz : Bool }`
 	actualConfigType, err := GetDhallType(&ConfigType{})
 	if err != nil {
 		t.Fatal(err)
@@ -31,7 +31,7 @@ func TestLoadConfig(t *testing.T) {
 
 	actualConfig := &ConfigType{}
 
-	err := LoadConfig("{ Foo = \"bar\", Bar = 6, Baz = True }", actualConfig)
+	err := LoadConfig("{ Foo = \"bar\", Bar = +6, Baz = True }", actualConfig)
 	if err != nil {
 		t.Fatal(err)
 	}
