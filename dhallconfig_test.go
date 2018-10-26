@@ -12,10 +12,13 @@ type ConfigType struct {
 }
 
 func TestGetType(t *testing.T) {
-	expectedConfigType := "{ Foo : Text, Bar : Integer, Baz : Bool }"
-	actualConfigType := GetDhallType(&ConfigType{})
+	expectedConfigType := `{ Bar : Integer, Baz : Bool, Foo : Text }`
+	actualConfigType, err := GetDhallType(&ConfigType{})
+	if err != nil {
+		t.Fatal(err)
+	}
 	if actualConfigType != expectedConfigType {
-		t.Fatalf("expected %s, got %s", expectedConfigType, actualConfigType)
+		t.Fatalf("expected(%s), got (%s)", expectedConfigType, actualConfigType)
 	}
 }
 

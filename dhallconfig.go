@@ -6,14 +6,27 @@ import (
 	"fmt"
 	"os/exec"
 	"reflect"
+	"strings"
 
 	"github.com/andrewchambers/go-extra/errors"
 )
 
-func GetDhallType(config interface{}) string {
-	var b bytes.Buffer
-	getDhallType(&b, config)
-	return b.String()
+func GetDhallType(config interface{}) (string, error) {
+	var input bytes.Buffer
+	var output bytes.Buffer
+
+	getDhallType(&input, config)
+
+	cmd := exec.Command("dhall-format")
+	cmd.Stdin = &input
+	cmd.Stdout = &output
+
+	err := cmd.Run()
+	if err != nil {
+		return "", errors.Wrap(err)
+	}
+
+	return strings.Trim(output.String(), " \n"), nil
 }
 
 func getDhallType(buf *bytes.Buffer, config interface{}) {
@@ -53,17 +66,26 @@ func getDhallType(buf *bytes.Buffer, config interface{}) {
 
 func LoadConfig(configExpression string, config interface{}) error {
 
+	if configExpression == "" {
+		return errors.New("Expected a config expression, got an empty string.")
+	}
+
 	var input bytes.Buffer
 	var output bytes.Buffer
 	var stderr bytes.Buffer
 
-	_, _ = fmt.Fprintf(&input, "%s : %s", configExpression, GetDhallType(config))
+	t, err := GetDhallType(config)
+	if err != nil {
+		return errors.Wrap(err)
+	}
+
+	_, _ = fmt.Fprintf(&input, "%s : %s", configExpression, t)
 	cmd := exec.Command("dhall-to-json")
 	cmd.Stdin = &input
 	cmd.Stdout = &output
 	cmd.Stderr = &stderr
 
-	err := cmd.Run()
+	err = cmd.Run()
 	if err != nil {
 		return errors.New(stderr.String())
 	}
