@@ -6,7 +6,7 @@ Because your config is a dhall expression:
 
 - Load config from environment variables.
 - Load config from local files.
-- Safely load config remote from a server.
+- Safely load config from a remote server.
 - Factor your config with functions (while still collapsing to a known type.).
 - Get type checking and nice error messages for your config.
 - Get an automatic config formatter with ```dhall format```.
