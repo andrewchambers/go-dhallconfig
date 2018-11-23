@@ -1,6 +1,6 @@
 # go-dhallconfig
 
-Currently a small go [dhal](https://github.com/dhall-lang/dhall-lang) config library.
+Currently a small go [dhall](https://github.com/dhall-lang/dhall-lang) config library.
 
 Because your config is a dhall expression, you can safely load environment variables, fetch
 config from remote sources, or factor your config with functions, but the end result is always
