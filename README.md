@@ -2,9 +2,14 @@
 
 Currently a small go [dhall](https://github.com/dhall-lang/dhall-lang) config library.
 
-Because your config is a dhall expression, you can safely load environment variables, fetch
-config from remote sources, or factor your config with functions, but the end result is always
-a statically typed value you can inspect.
+Because your config is a dhall expression:
+
+- Load config from environment variables.
+- Load config from local files.
+- Safely load config remote from a server.
+- Factor your config with functions (while still collapsing to a known type.).
+- Get type checking and nice error messages for your config.
+- Get an automatic config formatter with ```dhall format```.
 
 It lets you type check and load dhall config files into go structs, if you config is of the wrong type, you
 will get an error message.
