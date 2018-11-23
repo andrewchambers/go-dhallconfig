@@ -46,3 +46,8 @@ type Config struct {
 		panic(err)
 	}
 ```
+
+# Tips
+
+You don't need to put any file loading logic in your code. Just accept a dhall expression from the command line.
+"./foo.dhall" is a valid expression and the dhall interpreter will load your config.
