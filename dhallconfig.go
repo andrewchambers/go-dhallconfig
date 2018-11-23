@@ -12,13 +12,13 @@ import (
 )
 
 func GetDhallType(config interface{}) (string, error) {
-	var input bytes.Buffer
 	var output bytes.Buffer
 
-	getDhallType(&input, config)
+	v := reflect.ValueOf(config)
+	dhallType := getDhallType(v.Type())
 
 	cmd := exec.Command("dhall", "format")
-	cmd.Stdin = &input
+	cmd.Stdin = strings.NewReader(dhallType)
 	cmd.Stdout = &output
 
 	err := cmd.Run()
@@ -29,39 +29,48 @@ func GetDhallType(config interface{}) (string, error) {
 	return strings.Trim(output.String(), " \n"), nil
 }
 
-func getDhallType(buf *bytes.Buffer, config interface{}) {
+func getDhallType(t reflect.Type) string {
 
-	v := reflect.ValueOf(config)
-	if v.Kind() == reflect.Ptr {
-		v = reflect.Indirect(v)
+	for {
+		if t.Kind() != reflect.Ptr {
+			break
+		}
+		t = t.Elem()
 	}
 
-	_, _ = fmt.Fprintf(buf, "{")
+	switch t.Kind() {
+	case reflect.Slice:
+		return fmt.Sprintf("List %s", getDhallType(t.Elem()))
+	case reflect.Struct:
+		var buf bytes.Buffer
 
-	t := v.Type()
-	for i := 0; i < t.NumField(); i++ {
-		terminator := ", "
-		if i == t.NumField()-1 {
-			terminator = ""
-		}
+		_, _ = fmt.Fprintf(&buf, "{")
 
-		f := t.Field(i)
-		k := f.Type.Kind()
-		switch k {
-		case reflect.Bool:
-			_, _ = fmt.Fprintf(buf, "%s : Bool%s", f.Name, terminator)
-		case reflect.Uint64:
-			_, _ = fmt.Fprintf(buf, "%s : Natural%s", f.Name, terminator)
-		case reflect.Int64:
-			_, _ = fmt.Fprintf(buf, "%s : Integer%s", f.Name, terminator)
-		case reflect.String:
-			_, _ = fmt.Fprintf(buf, "%s : Text%s", f.Name, terminator)
-		default:
-			panic(fmt.Sprintf("unsupported kind %v", k))
+		for i := 0; i < t.NumField(); i++ {
+			terminator := ", "
+			if i == t.NumField()-1 {
+				terminator = ""
+			}
+
+			f := t.Field(i)
+			_, _ = fmt.Fprintf(&buf, "%s : %s%s", f.Name, getDhallType(f.Type), terminator)
 		}
+		_, _ = fmt.Fprintf(&buf, " }")
+		return buf.String()
+	case reflect.Bool:
+		return "Bool"
+	case reflect.Uint64:
+		return "Natural"
+	case reflect.Int64:
+		return "Integer"
+	case reflect.Float64:
+		return "Double"
+	case reflect.String:
+		return "Text"
+	default:
+		panic(fmt.Sprintf("unsupported type %v", t))
 	}
 
-	_, _ = fmt.Fprintf(buf, " }")
 }
 
 func LoadConfig(configExpression string, config interface{}) error {
