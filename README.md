@@ -28,7 +28,7 @@ type Config struct {
 
 ...
 
-	config := &Config{}
+    config := &Config{}
 
     configText := `
         { Foo =
