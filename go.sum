@@ -1,0 +1,4 @@
+github.com/andrewchambers/go-extra v0.0.0-20181025074457-a83364f5773a h1:FQNF97DUR9gOKolj0dr3S3gRMOmCI+7/wWFx/Z6yxoA=
+github.com/andrewchambers/go-extra v0.0.0-20181025074457-a83364f5773a/go.mod h1:36vuyk6P6/RhnVeJWcT/jJ0Um2J+hTMX6jo3bSSgm1Y=
+golang.org/x/net v0.0.0-20180926154720-4dfa2610cdf3/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
+golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
