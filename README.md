@@ -18,12 +18,12 @@ will get an error message.
 
 ```
 type Config struct {
-	Foo  string
-	Bar  int64
-	Baz  bool
-	Boo  float64
-	Bag  []int64
-	Nest struct{ Foo bool }
+    Foo  string
+    Bar  int64
+    Baz  bool
+    Boo  float64
+    Bag  []int64
+    Nest struct{ Foo bool }
 }
 
 ...
@@ -46,10 +46,10 @@ type Config struct {
         }
     `
 
-	err := dhallconfig.LoadConfig(configText, actualConfig)
-	if err != nil {
-		panic(err)
-	}
+    err := dhallconfig.LoadConfig(configText, actualConfig)
+    if err != nil {
+        panic(err)
+    }
 ```
 
 # Tips
