@@ -38,10 +38,15 @@ func getDhallType(t reflect.Type) string {
 		t = t.Elem()
 	}
 
+	if t.PkgPath()+"."+t.Name() == "math/big.Int" {
+		return "Integer"
+	}
+
 	switch t.Kind() {
 	case reflect.Slice:
 		return fmt.Sprintf("List %s", getDhallType(t.Elem()))
 	case reflect.Struct:
+
 		var buf bytes.Buffer
 
 		_, _ = fmt.Fprintf(&buf, "{")
