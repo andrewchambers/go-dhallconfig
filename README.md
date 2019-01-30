@@ -14,6 +14,8 @@ Because your config is a dhall expression:
 It lets you type check and load dhall config files into go structs, if you config is of the wrong type, you
 will get an error message.
 
+Note that the dhall and dhall-to-json command line tools need to be installed.
+
 # Example
 
 ```
