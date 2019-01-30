@@ -3,12 +3,11 @@ package dhallconfig
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os/exec"
 	"reflect"
 	"strings"
-
-	"github.com/andrewchambers/go-extra/errors"
 )
 
 func GetDhallType(config interface{}) (string, error) {
@@ -23,7 +22,7 @@ func GetDhallType(config interface{}) (string, error) {
 
 	err := cmd.Run()
 	if err != nil {
-		return "", errors.Wrap(err)
+		return "", err
 	}
 
 	return strings.Trim(output.String(), " \n"), nil
@@ -78,6 +77,9 @@ func getDhallType(t reflect.Type) string {
 
 }
 
+// LoadConfig is a convenience function, Load a dhall config while
+// forwarding any errors to stderr. This is usually what you want
+// for command line programs such as servers.
 func LoadConfig(configExpression string, config interface{}) error {
 
 	if configExpression == "" {
@@ -90,7 +92,7 @@ func LoadConfig(configExpression string, config interface{}) error {
 
 	t, err := GetDhallType(config)
 	if err != nil {
-		return errors.Wrap(err)
+		return err
 	}
 
 	_, _ = fmt.Fprintf(&input, "%s : %s", configExpression, t)
@@ -106,7 +108,7 @@ func LoadConfig(configExpression string, config interface{}) error {
 
 	err = json.Unmarshal(output.Bytes(), config)
 	if err != nil {
-		return errors.Wrap(err)
+		return err
 	}
 
 	return nil
