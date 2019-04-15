@@ -48,7 +48,7 @@ type Config struct {
         }
     `
 
-    err := dhallconfig.LoadConfig(configText, actualConfig)
+    err := dhallconfig.LoadConfig(configText, config)
     if err != nil {
         panic(err)
     }
